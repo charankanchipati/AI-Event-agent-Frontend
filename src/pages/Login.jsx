@@ -24,7 +24,7 @@ try{
 
 const res = await axios.post(
 
- "https://ai-event-agent-gqnk.onrender.com/api/auth/login",
+ "https://ai-event-agent-frontend.onrender.com/api/auth/login",
 
 {
 

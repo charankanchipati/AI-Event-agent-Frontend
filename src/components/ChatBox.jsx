@@ -120,7 +120,7 @@ try{
 
 const res = await axios.get(
 
-`https://ai-event-agent-gqnk.onrender.com/api/chats/${userId}/${id}`
+`https://ai-event-agent-frontend.onrender.com/api/chats/${userId}/${id}`
 
 );
 
@@ -230,7 +230,7 @@ try{
 
 const res = await axios.post(
 
-"https://ai-event-agent-gqnk.onrender.com//api/chat",
+"https://ai-event-agent-frontend.onrender.com//api/chat",
 
 {
 

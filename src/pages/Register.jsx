@@ -16,7 +16,7 @@ const [password,setPassword]=useState("");
 
 const [confirmPassword,setConfirmPassword]=useState("");
 const API =
-"https://ai-event-agent-gqnk.onrender.com";
+"https://ai-event-agent-frontend.onrender.com";
 
 
 
