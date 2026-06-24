@@ -26,7 +26,7 @@ try{
 
 const res = await axios.get(
 
-`https://ai-event-agent-frontend.onrender.com//api/chats/${userId}`
+`https://ai-event-agent-frontend.onrender.com/api/chats/${userId}`
 
 );
 
