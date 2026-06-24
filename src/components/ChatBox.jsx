@@ -4,25 +4,19 @@ import axios from "axios";
 
 function ChatBox(){
 
-const [agentStatus,setAgentStatus] = useState("🟢 Ready");
-const [message,setMessage]=useState("");
 
-const [messages,setMessages]=useState([]);
+const [agentStatus,setAgentStatus] = useState("🟢 Ready");
+
+const [message,setMessage] = useState("");
+
+const [messages,setMessages] = useState([]);
 
 
 const chatEndRef = useRef(null);
 
 
 
-const userId =
-localStorage.getItem("userId");
-
-
-
-// const chatId =
-// localStorage.getItem("chatId");
-
-
+const userId = localStorage.getItem("userId");
 
 
 
@@ -46,6 +40,7 @@ behavior:"smooth"
 
 
 
+
 // CLEAR NEW CHAT
 
 useEffect(()=>{
@@ -53,12 +48,9 @@ useEffect(()=>{
 
 function clearChat(){
 
-
 setMessages([]);
 
-
 }
-
 
 
 window.addEventListener(
@@ -73,7 +65,6 @@ clearChat
 
 return()=>{
 
-
 window.removeEventListener(
 
 "newChat",
@@ -82,14 +73,10 @@ clearChat
 
 );
 
-
 }
 
 
-
 },[]);
-
-
 
 
 
@@ -105,9 +92,7 @@ useEffect(()=>{
 async function loadOldChat(){
 
 
-const id =
-localStorage.getItem("chatId");
-
+const id = localStorage.getItem("chatId");
 
 
 if(!id)
@@ -134,15 +119,16 @@ setMessages(res.data);
 
 catch(err){
 
-
 console.log(
+
 "Load chat error",
+
 err
+
 );
 
 
 }
-
 
 
 }
@@ -161,7 +147,6 @@ loadOldChat
 
 
 loadOldChat();
-
 
 
 
@@ -191,17 +176,20 @@ loadOldChat
 
 
 
-
-
 async function sendMessage(){
 
-setAgentStatus("🟡 Thinking...");
+
 if(!message.trim())
 return;
 
 
 
+setAgentStatus("🟡 Thinking...");
+
+
+
 const text = message;
+
 
 
 setMessage("");
@@ -230,7 +218,9 @@ try{
 
 const res = await axios.post(
 
+
 "https://ai-event-agent-frontend.onrender.com/api/chat",
+
 
 {
 
@@ -238,8 +228,7 @@ const res = await axios.post(
 userId:userId,
 
 
-chatId:
-localStorage.getItem("chatId"),
+chatId:localStorage.getItem("chatId"),
 
 
 message:text
@@ -248,7 +237,10 @@ message:text
 }
 
 
+
 );
+
+
 
 
 
@@ -260,15 +252,26 @@ setMessages(prev=>[
 
 {
 
-
 role:"assistant",
 
 text:res.data.reply
 
-
 }
 
 ]);
+
+
+
+
+
+// MEMORY UPDATE
+
+// if(setMemory && res.data.memory){
+
+// setMemory(res.data.memory);
+
+// }
+
 
 
 
@@ -281,37 +284,54 @@ new Event("chatUpdated")
 );
 
 
+
 setAgentStatus("🟢 Ready");
 
+
+
 }
+
+
 
 catch(error){
 
 
-console.log(error);
+console.log(
+
+"Chat error",
+
+error
+
+);
+
+
+
+setAgentStatus("🔴 Error");
 
 
 }
 
 
-setAgentStatus("complete");
+
 }
+
+
+
+
 
 
 
 return(
 
 
-
 <div className="chat-container">
-
-
 
 
 
 <h3>
 
 Agent Status:
+
 <span>{agentStatus}</span>
 
 </h3>
@@ -325,12 +345,9 @@ Agent Status:
 <div className="messages">
 
 
-
 {
 
-
 messages.map((msg,index)=>(
-
 
 
 <div
@@ -351,12 +368,10 @@ msg.role==="user"
 
 }
 
-
 >
 
 
 {
-
 
 msg.text.split("\n").map((line,i)=>(
 
@@ -368,34 +383,24 @@ msg.text.split("\n").map((line,i)=>(
 </p>
 
 
-
 ))
 
-
 }
-
 
 
 </div>
 
 
-
 ))
 
-
 }
-
 
 
 
 <div ref={chatEndRef}/>
 
 
-
 </div>
-
-
-
 
 
 
@@ -406,19 +411,17 @@ msg.text.split("\n").map((line,i)=>(
 <div className="input-area">
 
 
-
 <input
 
 
 value={message}
 
 
-onChange={(e)=>
-setMessage(e.target.value)
-}
+onChange={(e)=>setMessage(e.target.value)}
 
 
 placeholder="Ask your event plan..."
+
 
 />
 
@@ -431,26 +434,468 @@ Send
 </button>
 
 
-
-
 </div>
 
 
 
 
 
-
 </div>
-
 
 
 )
 
-
 }
 
 
+
 export default ChatBox;
+
+
+// import { useState,useEffect,useRef } from "react";
+// import axios from "axios";
+
+
+// function ChatBox({setMemory}){
+
+// const [agentStatus,setAgentStatus] = useState("🟢 Ready");
+// const [message,setMessage]=useState("");
+
+// const [messages,setMessages]=useState([]);
+
+
+// const chatEndRef = useRef(null);
+
+
+
+// const userId =
+// localStorage.getItem("userId");
+
+
+
+// // const chatId =
+// // localStorage.getItem("chatId");
+
+
+
+
+
+
+// // AUTO SCROLL
+
+// useEffect(()=>{
+
+
+// chatEndRef.current?.scrollIntoView({
+
+// behavior:"smooth"
+
+// });
+
+
+// },[messages]);
+
+
+
+
+
+
+// // CLEAR NEW CHAT
+
+// useEffect(()=>{
+
+
+// function clearChat(){
+
+
+// setMessages([]);
+
+
+// }
+
+
+
+// window.addEventListener(
+
+// "newChat",
+
+// clearChat
+
+// );
+
+
+
+// return()=>{
+
+
+// window.removeEventListener(
+
+// "newChat",
+
+// clearChat
+
+// );
+
+
+// }
+
+
+
+// },[]);
+
+
+
+
+
+
+
+
+
+// // LOAD OLD CHAT
+
+// useEffect(()=>{
+
+
+// async function loadOldChat(){
+
+
+// const id =
+// localStorage.getItem("chatId");
+
+
+
+// if(!id)
+// return;
+
+
+
+// try{
+
+
+// const res = await axios.get(
+
+// `https://ai-event-agent-frontend.onrender.com/api/chats/${userId}/${id}`
+
+// );
+
+
+
+// setMessages(res.data);
+
+
+
+// }
+
+// catch(err){
+
+
+// console.log(
+// "Load chat error",
+// err
+// );
+
+
+// }
+
+
+
+// }
+
+
+
+
+// window.addEventListener(
+
+// "loadChat",
+
+// loadOldChat
+
+// );
+
+
+
+// loadOldChat();
+
+
+
+
+// return()=>{
+
+
+// window.removeEventListener(
+
+// "loadChat",
+
+// loadOldChat
+
+// );
+
+
+// }
+
+
+
+// },[userId]);
+
+
+// async function sendMessage(){
+
+// setAgentStatus("🟡 Thinking...");
+// if(!message.trim())
+// return;
+
+
+
+// const text = message;
+
+
+// setMessage("");
+
+
+
+// setMessages(prev=>[
+
+// ...prev,
+
+// {
+
+// role:"user",
+
+// text:text
+
+// }
+
+// ]);
+
+
+
+
+// try{
+
+
+// const res = await axios.post(
+
+// "https://ai-event-agent-frontend.onrender.com/api/chat",
+
+// {
+
+
+// userId:userId,
+
+
+// chatId:
+// localStorage.getItem("chatId"),
+
+// message:message
+
+// }
+
+
+// );
+
+
+
+
+
+// setMessages(prev=>[
+
+// ...prev,
+
+// {
+
+
+// role:"assistant",
+
+// text:res.data.reply
+
+
+// }
+
+// ]);
+
+// setMemory(res.data.memory);
+
+
+
+// window.dispatchEvent(
+
+// new Event("chatUpdated")
+
+// );
+
+
+// setAgentStatus("🟢 Ready");
+
+// }
+
+// catch(error){
+
+
+// console.log(error);
+
+
+// }
+
+
+// setAgentStatus("complete");
+// }
+
+
+
+// return(
+
+
+
+// <div className="chat-container">
+
+
+
+
+
+// <h3>
+
+// Agent Status:
+// <span>{agentStatus}</span>
+
+// </h3>
+
+
+
+
+
+
+
+// <div className="messages">
+
+
+
+// {
+
+
+// messages.map((msg,index)=>(
+
+
+
+// <div
+
+// key={index}
+
+// className={
+
+// msg.role==="user"
+
+// ?
+
+// "user-msg"
+
+// :
+
+// "bot-msg"
+
+// }
+
+
+// >
+
+
+// {
+
+
+// msg.text.split("\n").map((line,i)=>(
+
+
+// <p key={i}>
+
+// {line}
+
+// </p>
+
+
+
+// ))
+
+
+// }
+
+
+
+// </div>
+
+
+
+// ))
+
+
+// }
+
+
+
+
+// <div ref={chatEndRef}/>
+
+
+
+// </div>
+
+
+
+
+
+
+
+
+
+
+// <div className="input-area">
+
+
+
+// <input
+
+
+// value={message}
+
+
+// onChange={(e)=>
+// setMessage(e.target.value)
+// }
+
+
+// placeholder="Ask your event plan..."
+
+// />
+
+
+
+// <button onClick={sendMessage}>
+
+// Send
+
+// </button>
+
+
+
+
+// </div>
+
+
+
+
+
+
+// </div>
+
+
+
+// )
+
+
+// }
+
+
+// export default ChatBox;
+
+
 // import { useState, useEffect, useRef } from "react";
 // import axios from "axios";
 
