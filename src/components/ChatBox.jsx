@@ -169,7 +169,93 @@ loadOldChat
 },[userId]);
 
 
+async function downloadPDF(){
 
+try{
+
+
+console.log("Creating PDF");
+
+
+const response = await axios.post(
+
+"https://ai-event-agent-frontend.onrender.com/api/export-pdf",
+
+{
+
+content: messages
+.filter(
+msg => msg.role==="assistant"
+)
+.map(
+msg=>msg.text
+)
+.join("\n")
+
+},
+
+{
+responseType:"blob"
+}
+
+);
+
+
+
+const blob = new Blob(
+
+[response.data],
+
+{
+type:"application/pdf"
+}
+
+);
+
+
+
+const url = window.URL.createObjectURL(blob);
+
+
+
+const a = document.createElement("a");
+
+
+a.href=url;
+
+
+a.download="Event-Plan.pdf";
+
+
+document.body.appendChild(a);
+
+
+a.click();
+
+
+a.remove();
+
+
+window.URL.revokeObjectURL(url);
+
+
+
+console.log("PDF downloaded");
+
+
+}
+
+catch(error){
+
+console.log(
+"PDF ERROR:",
+error
+);
+
+}
+
+
+}
 
 
 
@@ -430,6 +516,11 @@ placeholder="Ask your event plan..."
 <button onClick={sendMessage}>
 
 Send
+
+</button>
+<button onClick={downloadPDF}>
+
+📄 Download PDF
 
 </button>
 

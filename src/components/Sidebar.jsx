@@ -248,7 +248,15 @@ Chats
 
 chats.length===0 ?
 
-<p>No chats yet</p>
+<div className="empty-chat">
+
+<p>No conversations yet</p>
+
+<span>
+Start planning your event 🎉
+</span>
+
+</div>
 
 
 :
